@@ -56,7 +56,7 @@ You also need a file with the approved keys in the folder, named 'approved_keys.
 Aligned fasttext spaces can be found at:
 https://github.com/facebookresearch/MUSE
 
-Current workflow (still specific to one the tmx-data-format)
+Current workflow:
 
 1) Use the 'run_extract_and_convert' function from 'extract_tmx_to_fastalign_format.py' to extract data from tmx-format files, and produce pre-alignments
 That is, a Python file specific for the tmx file has to be written. (The plan is to simplify this in the future.)

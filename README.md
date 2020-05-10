@@ -34,6 +34,7 @@ conda install -c anaconda setuptools
 
 To get the efmaral installation to work on mac with Mojave, you need to do:
 open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
+
 (The "/usr/include" folder does not seem to be there by default, so that's why. See more in:
 https://www.howtobuildsoftware.com/index.php/how-do/cPv/xcode-osx-gcc-fatal-error-limitsh-no-such-file-or-directory
 https://developpaper.com/how-to-solve-pip-install-twisted-error-limits-h-no-such-file-or-directory/

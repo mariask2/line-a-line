@@ -1,6 +1,7 @@
 # line-a-line
 
-Since there are submodules, you need to clone recursively, e.g., 
+Since there are submodules, after you have done git clone, you need to run:
+git submodule update --init --recursive
 
 Code for word alignment 
 

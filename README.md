@@ -1,9 +1,14 @@
 # line-a-line
 
+Code for word alignment tool: line-a-line.
+
+The tool is explained in the following video:
+https://vimeo.com/416088411
+
+## How to run
+
 Since there are submodules, after you have done git clone, you need to run:
 git submodule update --init --recursive
-
-Code for word alignment 
 
 The following dependencies have to be installed:
 

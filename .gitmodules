@@ -1,0 +1,6 @@
+[submodule "MUSE"]
+	path = MUSE
+	url = https://github.com/facebookresearch/MUSE.git
+[submodule "efmaral"]
+	path = efmaral
+	url = https://github.com/robertostling/efmaral.git

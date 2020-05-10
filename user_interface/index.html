@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Topics2Themes">
+    
+    <title>Topics2Themes</title>
+	
+	<link rel="shortcut icon" href="favicon.png">
+		 
+	<!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	 	
+	<!-- noUiSlider -->
+	<link href="css/jquery.nouislider.min.css" rel="stylesheet">
+	 
+	<!-- Custom styles used for this page -->
+    <link href="{{"custom.css" | staticfile_css }}" rel="stylesheet">
+    
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+    
+  </head>
+  <body>
+      
+  	<div class="container-fluid">
+	    <div class="page-header outer-element">
+	    	<div class="row small-bottom-margin">
+                <div class="col-xs-2 small-top-margin">
+                    <h2 class="title-blue">line-a-line</h2>
+                </div>
+	    		<div class="col-xs-10 large-top-margin">
+	    			<div class="form-inline small-bottom-margin pull-right large-top-margin">
+                        
+				<select id="dataset" class="form-control dataset-choices">
+                            <option
+                                value="----"
+                                title="-----">------------ data set ------------</option>
+						</select>
+
+			  <select id="actionChoice" class="form-control dataset-choices">
+                            <option
+                                value="-----"
+                                title="-----">------ action ------</option>
+                            <option
+                                value="annotate"
+                                title="-----">annotate</option>
+                            <option
+                                value="browse-annotated"
+                                title="-----">browse annotated</option>
+			       <!---
+                            <option
+                                value="browse-non-yet-annotated"
+                                title="-----">browse not yet annotated</option>
+                             -->
+                        </select>
+
+			
+
+			
+                        <select id="sortingChoice" class="form-control dataset-choices">
+                            <option
+                                value=""
+                                title="">---------- sorting ----------</option>
+                            <option
+                                value="Difficult"
+                                title="">show most difficult first</option>
+                            <option
+                                value="Easy"
+                                title="">show easiest first</option>
+			     <option
+                                value="NotActive"
+			       title="">order in corpus</option>
+			     <option
+                                value="SearchContent"
+                                title="">search content</option>
+			       
+                        </select>
+
+                        
+			<textarea id="textinput" class = "searchtextinput" rows ="1"></textarea>
+        
+
+        
+        
+            <button id="save" type="button"
+                title="Save and go to next" class="btn
+                btn-default btn-xs left-button
+                header-button"
+                aria-label="">
+                <span  id="saveGlyphicon" class="glyphicon glyphicon-save save-button type_1_button" aria-hidden="true"></span>
+            </button>
+            
+	      <button id="stepBackward" type="button" title="Go to previous" class="btn btn-default btn-xs header-button" aria-label="Go to previous">
+                <span id="backGlyphicon" class="glyphicon glyphicon-arrow-left type-2-button" aria-hidden="true"></span>
+            </button>
+                     
+            <button id="delete" type="button"
+                title="Remove from data set" class="btn
+                btn-default btn-xs right-button
+                header-button"
+                aria-label="Remove from data set">
+                <span class="glyphicon glyphicon-trash type_1_button" aria-hidden="true"></span>
+            </button>
+
+            <button id="changeOrder" type="button" title="Change order for the two languages" class="btn btn-default btn-xs header-button left-button" aria-label="Construct new model">
+                <!-- glyphicon-cog -->
+                <span class="glyphicon glyphicon-transfer type_1_button" aria-hidden="true"></span>
+            </button>
+            
+            <select id="prealignmentChoice" class="form-control dataset-choices">
+                            <option
+                                           value="Embeddings"
+                                           title="">Embeddings +
+                                       Intersection</option>
+                            <option
+                                value="Intersection"
+                                title="">Intersection</option>
+                            <option
+                                value="Gdfa"
+                                title="">GDFA</option>
+
+                 <option
+                                value="Empty"
+                                title="">No pre-alignments</option>
+                        </select>
+                        
+                    </div>
+                </div><!-- /.col-md-6 -->
+	    	</div><!-- /.row  -->
+	    </div><!-- /.page-header -->
+	    
+	    <div id="mainRow" class="row-main small-bottom-margin">
+									
+			<div id="mainPanel" class="col-xs-12 no-bottom-margin">
+				<div id="mainPanelUpper" class="row
+				no-bottom-margin">
+
+            <div id="nodes1ContainerColumn" class="col-xs-1 no-bottom-margin">
+                                <div id="nodes1Container" class="panel panel-default no-bottom-margin small-left-margin">
+                                    <div class="panel-heading">
+                                        <div class="btn-group pull-right">
+                                        <button id="resizeTerms" type="button"
+                                            title="When activated, the terms are only partly shown"
+                                            class="btn btn-xs show-nodes-button" aria-label="When activated, token clusters are shown">
+                                            <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                                        </button>
+                                        </div>
+                                    <h3 class="panel-title">
+                                       &nbsp;
+                                    </h3>
+                                    </div>
+
+                                    <ul id="nodes1List" class="list-group">
+                                    </ul>
+                                </div>
+                            </div>
+            
+			<div id="textContainerColumn" class="col-xs-4 no-bottom-margin">
+						<div id="textContainer" class="panel panel-default no-bottom-margin small-left-margin right-margin">
+							<div class="panel-heading">
+								<h3 id
+						= "langtitle1"
+						class="panel-title">
+                            Language 1
+							</h3>
+							</div>
+
+							<ul id="lang1List" class="list-group">
+							</ul>	
+						</div><!-- /.textsContainer -->
+					</div><!-- /.third column in the main panel -->
+									      
+			<div id="themesContainerColumn" class="col-xs-6 no-bottom-margin">
+						<div id="themesContainer" class="panel panel-default no-bottom-margin small-left-margin">
+							<div class="panel-heading">
+                                
+								<h3
+						class="panel-title" id="langtitle2">
+                        Language 2
+                                </h3>
+							</div>
+					
+							<ul id="lang2List" class="list-group">
+							</ul>	
+						</div><!-- /.themesContainer -->
+					</div><!-- /.right column in the main panel -->
+		
+        <div id="nodes2ContainerColumn" class="col-xs-1 no-bottom-margin">
+                            <div id="nodes2Container" class="panel panel-default no-bottom-margin small-left-margin">
+                                <div class="panel-heading">
+                                      <div class="btn-group pull-right">
+                                    <button id="resizeTerms" type="button"
+                                        title="When activated, the terms are only partly shown"
+                                        class="btn btn-xs show-nodes-button" aria-label="When activated, token clusters are shown">
+                                        <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                                    </button>
+                                    </div>
+                                <h3 class="panel-title">
+                                   &nbsp;
+                                </h3>
+                                </div>
+
+                                <ul id="nodes2List" class="list-group">
+                                </ul>
+                            </div>
+                        </div>
+
+					</div>
+					<div id="bgSvgContainer">
+					</div>
+					
+				</div><!-- /.upperRow in the main panel -->
+				
+					
+			</div><!-- /.mainPanel -->
+			
+		</div><!-- /.mainRow  -->
+		
+		<div id="footer">
+		    <hr>
+
+		    	<p class="text-muted credit no-bottom-margin right-margin">
+					Version 0.0.1.
+				</p>
+		</div><!-- /.footer -->
+		
+    </div><!-- /.container -->
+    			
+    <div id="overlay"></div>			
+		
+	<!-- jQuery -->
+    <script src="js/jquery.js"></script>
+    <!-- Include all compiled plugins -->
+    <script src="js/bootstrap.min.js"></script>
+    
+    <!-- D3 -->
+    <script src="js/d3.v3.min.js"></script>
+    <!-- Colorbrewer colors; might not need this at all -->
+    <script src="js/colorbrewer.js"></script>
+    
+	<!-- noUiSlider; might not need this at all -->
+	<script src="js/jquery.nouislider.min.js"></script>	
+		
+    <!-- underscore.js; might not need this at all -->
+    <script src="js/underscore.min.js"></script>
+        
+    <!-- moment.js -->
+    <script src="js/moment.min.js"></script>
+    
+    <!-- Custom JS code -->
+    <script src="{{"model.js" | staticfile }}"></script>
+    <script src="{{"controller.js" | staticfile }}"></script>
+  </body>
+</html>

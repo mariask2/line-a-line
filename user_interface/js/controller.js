@@ -89,7 +89,13 @@ $(document).ready(function(){
 		.on("mouseenter", ".term-element", onLang2ElementMouseEnter)
 		.on("mouseleave", ".term-element", onLang2ElementMouseLeave);
 	
-	
+    $("#nodes1List")
+        .on("mouseenter", ".term-element", nodes1ListElementMouseEnter)
+        .on("mouseleave", ".term-element", nodes1ListElementMouseLeave);
+    $("#nodes2List")
+        .on("mouseenter", ".term-element", nodes2ListElementMouseEnter)
+        .on("mouseleave", ".term-element", nodes2ListElementMouseLeave);
+                  
     resetInterface();
     resetModelData();
                   
@@ -1119,7 +1125,7 @@ function resetLinkHighlight() {
 // Handles hovering for a document element
 function onLang1ElementMouseEnter() {
     resetHighlight();
-   highlightLang1Element($(this), DIRECTHIGHLIGHT, HIGHLIGHT);
+    highlightLang1Element($(this), DIRECTHIGHLIGHT, HIGHLIGHT);
 }
 
 // Handles hovering for a document element
@@ -1127,18 +1133,34 @@ function onLang1ElementMouseLeave() {
 	resetHighlight();
 }
 
-
 // Handles hovering for a term element
 function onLang2ElementMouseEnter() {
     resetHighlight();
-	highlightLang2Element($(this), DIRECTHIGHLIGHT, HIGHLIGHT);
+    highlightLang2Element($(this), DIRECTHIGHLIGHT, HIGHLIGHT);
 }
 
 // Handles hovering for a term element
 function onLang2ElementMouseLeave() {
-	resetHighlight();
+    resetHighlight();
 }
 
+function nodes1ListElementMouseEnter(){
+    resetHighlight();
+    highlightNode1Element($(this), DIRECTHIGHLIGHT, HIGHLIGHT);
+}
+
+function nodes2ListElementMouseEnter(){
+    resetHighlight();
+    highlightNode2Element($(this), DIRECTHIGHLIGHT, HIGHLIGHT);                           
+}
+
+function nodes1ListElementMouseLeave(){
+    resetHighlight();
+}
+
+function nodes2ListElementMouseLeave(){
+    resetHighlight();
+}
 
 ////
 // Render link highlights
@@ -1200,8 +1222,27 @@ function highlightLang1Element(termElement, direct, indirect) {
     highlightLang1Links(term.nr);
     
     secondaryHighlightLang(indirect, term.nr, "#lang2List", "#lang1List", "#nodes2List");
-    secondaryHighlightNode(indirect, term.nr, "#nodes1List");
-    	
+    secondaryHighlightNode(indirect, term.nr, "#nodes1List");   	
+}
+
+function highlightNode1Element(termElement, direct, indirect){
+    
+    // First of all, highlight the element under cursor
+    termElement.addClass(direct);
+
+    // Get the datum
+    let datum = d3.select(termElement.get(0)).datum();
+
+    for (let j = 0; j < datum.alignments.length; j++){
+	let nr = datum.alignments[j];
+	
+	d3.select("#lang1List").selectAll("li")
+	    .filter(function(d, i){
+            return d.nr == nr;
+	    })
+	    .each(function(d, i){
+		 highlightLang1Element($(this), HIGHLIGHT, HIGHLIGHT)});
+    } 
 }
 
 function secondaryHighlightLang(highlightClass, nr, listName, otherListName, secondaryNodesList){
@@ -1213,11 +1254,11 @@ function secondaryHighlightLang(highlightClass, nr, listName, otherListName, sec
     .each(function(d, i){
           secondaryHighlightNode(highlightClass, d.nr, secondaryNodesList)})
     .each(function(d, i){
-	thirdlyHighlight(d, otherListName, d.nr, highlightClass);
+	thirdlyHighlight(otherListName, d.nr, highlightClass);
     })
 	 }
 
-function thirdlyHighlight(d, otherListName, nr, highlightClass){
+function thirdlyHighlight(otherListName, nr, highlightClass){
      d3.select(otherListName).selectAll("li")
     .filter(function(d, i){
             return d.alignments.indexOf(nr) != -1;

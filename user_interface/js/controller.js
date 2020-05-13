@@ -812,7 +812,7 @@ function renderNodeLeftLinks() {
     let firstLang1Element = $("#lang1List > li.term-element:not(.not-displayed):first");
     
     let svgId = "node1Lang1"
-    let links = prepareCanvasForLinks(firstNode1Element, firstLang1Element, svgId, "langLinksHighlight")
+    let links = prepareCanvasForLinks(firstNode1Element, firstLang1Element, svgId, "nodeLeftLinksHighlight")
     
     d3.select("#lang1List").selectAll("li:not(.not-displayed)")
     .each(function(d, i){
@@ -825,7 +825,7 @@ function renderNodeLeftLinks() {
                 
                 drawLinks(node1Element, lang1Element, 1,
                           opacityScale, strokeWidthScale, links,
-                          { lang1: e.nr, lang2: d.nr }, "Theme #" + d.nr + "\n"
+                          { node1: e.nr, lang1: d.nr }, "Theme #" + d.nr + "\n"
                           + "Text #" + e.nr, "node1-to-lang1", svgId);
                 });
     
@@ -852,7 +852,7 @@ function renderNodeRightLinks() {
     let firstNode2Element = $("#nodes2List > li.term-element:not(.not-displayed):first");
     
     let svgId = "node2Lang2"
-    let links = prepareCanvasForLinks(firstLang2Element, firstNode2Element, svgId, "langLinksHighlight")
+    let links = prepareCanvasForLinks(firstLang2Element, firstNode2Element, svgId, "nodeRightLinksHighlight")
     
     d3.select("#nodes2List").selectAll("li:not(.not-displayed)")
     .each(function(d, i){
@@ -865,7 +865,7 @@ function renderNodeRightLinks() {
                 //alert(lang2Element.context.__data__.term);
                 drawLinks(lang2Element, node2Element, 1,
                           opacityScale, strokeWidthScale, links,
-                          { lang1: e.nr, lang2: d.nr }, "Theme #" + d.nr + "\n"
+                          { lang2: d.nr, node2: e.nr }, "Theme #" + d.nr + "\n"
                           + "Text #" + e.nr, "node2-to-lang2", svgId);
                 });
     
@@ -1190,6 +1190,19 @@ function renderLangToLangLinkHighlight() {
     renderLinksHighlight("#langLinksHighlight", link);
 }
 
+function renderNodeLeftLinksHighlight() {
+    var link = d3.select(this);
+    renderLinksHighlight("#nodeLeftLinksHighlight", link);
+}
+
+function renderNodeRightLinksHighlight() {
+    var link = d3.select(this);
+    renderLinksHighlight("#nodeRightLinksHighlight", link);
+}
+
+
+
+
 
 //////
 // Functions for direct highligting
@@ -1232,7 +1245,8 @@ function highlightNode1Element(termElement, direct, indirect){
 
     // Get the datum
     let datum = d3.select(termElement.get(0)).datum();
-
+    highlightNode1Links(datum.nr)
+    
     for (let j = 0; j < datum.alignments.length; j++){
 	let nr = datum.alignments[j];
 	
@@ -1241,9 +1255,31 @@ function highlightNode1Element(termElement, direct, indirect){
             return d.nr == nr;
 	    })
 	    .each(function(d, i){
-		 highlightLang1Element($(this), HIGHLIGHT, HIGHLIGHT)});
+		 highlightLang1Element($(this), indirect, indirect)});
     } 
 }
+
+function highlightNode2Element(termElement, direct, indirect){
+    
+    // First of all, highlight the element under cursor
+    termElement.addClass(direct);
+
+    // Get the datum
+    let datum = d3.select(termElement.get(0)).datum();
+    highlightNode2Links(datum.nr)
+
+    for (let j = 0; j < datum.alignments.length; j++){
+	let nr = datum.alignments[j];
+	
+	d3.select("#lang2List").selectAll("li")
+	    .filter(function(d, i){
+            return d.nr == nr;
+	    })
+	    .each(function(d, i){
+		 highlightLang2Element($(this), indirect, indirect)});
+    } 
+}
+
 
 function secondaryHighlightLang(highlightClass, nr, listName, otherListName, secondaryNodesList){
         d3.select(listName).selectAll("li")
@@ -1296,6 +1332,24 @@ function highlightLang1Links(term1Nr){
             })
     .classed("link-highlight", true)
     .each(renderLangToLangLinkHighlight);
+}
+
+function highlightNode1Links(nodeNr){
+    d3.selectAll(".node1-to-lang1")
+	.filter(function(f, i){
+            return nodeNr == f.node1;
+        })
+	.classed("link-highlight", true)
+	.each(renderNodeLeftLinksHighlight);
+}
+
+function highlightNode2Links(nodeNr){
+    d3.selectAll(".node2-to-lang2")
+	.filter(function(f, i){
+            return nodeNr == f.lang2;
+        })	    
+	.classed("link-highlight", true)
+	.each(renderNodeRightLinksHighlight);
 }
 
 //////////

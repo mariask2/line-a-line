@@ -108,6 +108,7 @@ function prepareToShowPreAnnotation(){
 }
 
 function showNodes(nodesList, isShown, nodeData){
+    d3.select(nodesList).selectAll("li").remove();
     if(isShown){
         d3.select(nodesList).selectAll("li")
         .data(nodeData)
@@ -132,9 +133,6 @@ function showNodes(nodesList, isShown, nodeData){
         element.append(lang1Container)
          */
     });
-    }
-    else{
-        d3.select(nodesList).selectAll("li").remove();
     }
 }
 

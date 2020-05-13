@@ -1184,7 +1184,8 @@ function highlightLang2Element(termElement, direct, indirect) {
 	
     highlightLang2Links(term.nr);
 
-    secondaryHighlightLang(indirect, term.nr, "#lang1List",  "#lang2List");	
+    secondaryHighlightLang(indirect, term.nr, "#lang1List",  "#lang2List", "#nodes1List");
+    secondaryHighlightNode(indirect, term.nr, "#nodes2List");
 }
 
 // Highlights the given term element and related items
@@ -1198,22 +1199,25 @@ function highlightLang1Element(termElement, direct, indirect) {
 	
     highlightLang1Links(term.nr);
     
-    secondaryHighlightLang(indirect, term.nr, "#lang2List", "#lang1List");
+    secondaryHighlightLang(indirect, term.nr, "#lang2List", "#lang1List", "#nodes2List");
+    secondaryHighlightNode(indirect, term.nr, "#nodes1List");
     	
 }
 
-function secondaryHighlightLang(highlightClass, nr, listName, otherListName){
+function secondaryHighlightLang(highlightClass, nr, listName, otherListName, secondaryNodesList){
         d3.select(listName).selectAll("li")
     .filter(function(d, i){
             return d.alignments.indexOf(nr) != -1;
             })
     .classed(highlightClass, true)
     .each(function(d, i){
-	thirdlyHiglight(d, otherListName, d.nr, highlightClass);	
+          secondaryHighlightNode(highlightClass, d.nr, secondaryNodesList)})
+    .each(function(d, i){
+	thirdlyHighlight(d, otherListName, d.nr, highlightClass);
     })
 	 }
 
-function thirdlyHiglight(d, otherListName, nr, highlightClass){
+function thirdlyHighlight(d, otherListName, nr, highlightClass){
      d3.select(otherListName).selectAll("li")
     .filter(function(d, i){
             return d.alignments.indexOf(nr) != -1;
@@ -1221,6 +1225,14 @@ function thirdlyHiglight(d, otherListName, nr, highlightClass){
     .classed(highlightClass, true)
 	  }
 
+function secondaryHighlightNode(highlightClass, nr, listName){
+        d3.select(listName).selectAll("li")
+        .filter(function(d, i){
+                return d.alignments.indexOf(nr) != -1;
+                })
+        .classed(highlightClass, true)
+}
+                                                                        
 ///////
 // Higlight links
 //////

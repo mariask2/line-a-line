@@ -28,8 +28,8 @@ var BROWSEANNOTATED = "browse-annotated";
 var SEARCHCONTENT = "SearchContent"
 
 //var searchWriteMode = false;
-var showLeftNodes = false;
-var showRightNodes = false;
+var showLeftNodes = true;
+var showRightNodes = true;
 
 
 /////////////////////
@@ -66,7 +66,7 @@ $(document).ready(function(){
     $("#delete").click(onDelete);
     $("#stepBackward").click(onStepBack);
     $("#changeOrder").click(onChangeOrder);
-
+                  
     // Drag'n'drop handlers
     $("#lang1List")
         .on("dragstart", ".term-element", onLangElementDragStart)
@@ -104,6 +104,33 @@ function prepareToShowPreAnnotation(){
      }
 }
 
+function showNodes(nodesList, isShown, nodeData){
+    if(isShown){
+        d3.select(nodesList).selectAll("li")
+        .data(nodeData)
+        .enter()
+        .append("li")
+        .classed("list-group-item", true)
+    
+        .each(function(d, i){
+              let element = $(this);
+              element.addClass("term-element");
+              //element.attr("title", "Term: " + d.term);
+              let titleLabel = $("<span></span>");
+              titleLabel.addClass("title-label");
+              titleLabel.append(d.nr);
+              element.append(titleLabel);
+        
+        /*
+        let lang1Container = $("<span></span>");
+        lang1Container.addClass("lang-link-container");
+        lang1Container.addClass("pull-right")
+        populateLang1Container(d, lang1Container);
+        element.append(lang1Container)
+         */
+    });
+    }
+}
 
 function showPreannotation(){
     $("#lang1List").empty();
@@ -176,58 +203,9 @@ function showPreannotation(){
 	    element.append(lang1Container)
 	});
     
-    if(showLeftNodes){
-        d3.select("#nodes1List").selectAll("li")
-        .data(leftNodes)
-        .enter()
-        .append("li")
-        .classed("list-group-item", true)
-    
-        .each(function(d, i){
-              let element = $(this);
-              element.addClass("term-element");
-              //element.attr("title", "Term: " + d.term);
-              let titleLabel = $("<span></span>");
-              titleLabel.addClass("title-label");
-              titleLabel.append(d.nr);
-              element.append(titleLabel);
-        
-        /*
-        let lang1Container = $("<span></span>");
-        lang1Container.addClass("lang-link-container");
-        lang1Container.addClass("pull-right")
-        populateLang1Container(d, lang1Container);
-        element.append(lang1Container)
-         */
-    });
-    }
-    
-    if(showRightNodes){
-        d3.select("#nodes2List").selectAll("li")
-        .data(rightNodes)
-        .enter()
-        .append("li")
-        .classed("list-group-item", true)
-    
-        .each(function(d, i){
-              let element = $(this);
-              element.addClass("term-element");
-              //element.attr("title", "Term: " + d.term);
-              let titleLabel = $("<span></span>");
-              titleLabel.addClass("title-label");
-              titleLabel.append(d.nr);
-              element.append(titleLabel);
-        
-        /*
-        let lang1Container = $("<span></span>");
-        lang1Container.addClass("lang-link-container");
-        lang1Container.addClass("pull-right")
-        populateLang1Container(d, lang1Container);
-        element.append(lang1Container)
-         */
-    });
-    }
-    
+
+    showNodes("#nodes1List", showLeftNodes, leftNodes);
+    showNodes("#nodes2List", showRightNodes, rightNodes);
 
     renderLinks();
     
@@ -1303,9 +1281,8 @@ function onStepBack(){
 
 function onDelete(){
 
- 
     if (modelCurrentAction == ANNOTATE){
-	modelUndoClicked = false;
+    modelUndoClicked = false;
 	modelDeleteDataLoadNext();
     }
 
@@ -1317,10 +1294,14 @@ function onDelete(){
 function onChangeOrder(){
 
     if(modelReverseLang){
-	modelReverseLang = false;
+        modelReverseLang = false;
     }
     else{
-	modelReverseLang = true;
+        modelReverseLang = true;
     }
+                                                                        
     showPreannotation();   
 }
+
+                                                                        
+

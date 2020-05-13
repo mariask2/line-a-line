@@ -1319,13 +1319,17 @@ function onClickLeft(){
                                                                         
     if(showLeftNodes){
         showLeftNodes = false;
+        $("#nodes1").removeClass("show-nodes-button-selected");
     }
     else{
         showLeftNodes = true;
+        $("#nodes1").addClass("show-nodes-button-selected");
     }
                                                                         
+    
     showNodes("#nodes1List", showLeftNodes, leftNodes);
     renderLinks();
+                                                                        
 }
 
 function onClickRight(){
@@ -1339,9 +1343,11 @@ function onClickRight(){
                                                                         
     if(showRightNodes){
         showRightNodes = false;
+        $("#nodes2").removeClass("show-nodes-button-selected");
     }
     else{
         showRightNodes = true;
+        $("#nodes2").addClass("show-nodes-button-selected");
     }
 
     showNodes("#nodes2List", showRightNodes, rightNodes);

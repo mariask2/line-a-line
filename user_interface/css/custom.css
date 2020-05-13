@@ -43,44 +43,7 @@ hr {
     background-color: whitesmoke !important;;
 }
 
-.new-theme-button{
-    margin-left: 0px !important;
-    margin-right: 10px !important;
-    padding-left: 4px !important;
-    padding-right: 3px !important;
-    padding-bottom: 3px !important;
-    padding-top: 1px !important;
-    border-radius: 0px !important;
 
-}
-
-.hide-labels-button{
-    margin-left: 0px !important;
-    margin-right: 1px !important;
-    padding-left: 4px !important;
-    padding-right: 3px !important;
-    padding-bottom: 3px !important;
-    padding-top: 1px !important;
-}
-
-.lock-button{
-    margin-left: 0px !important;
-    margin-right: 1px !important;
-    padding-left: 4px !important;
-    padding-right: 3px !important;
-    padding-bottom: 3px !important;
-    padding-top: 1px !important;
-}
-
-.lock-text-button{
-    margin-left: 0px !important;
-    margin-right: 4px !important;
-    padding-left: 4px !important;
-    padding-right: 3px !important;
-    padding-bottom: 3px !important;
-    padding-top: 1px !important;
-    background-color: green;
-}
 
 .show-nodes-button{
     margin-left: 2px !important;
@@ -90,11 +53,14 @@ hr {
     padding-left: 4px !important;
     padding-right: 3px !important;
     padding-bottom: 0px !important;
-    padding-top: 0px !important;
+    padding-top: 3px !important;
     background-color: whitesmoke;
     border-color: silver;
 }
 
+.show-nodes-button-selected{
+    background-color: #E6F3FF !important;
+}
 
 .search-input {
 	font-size: small;

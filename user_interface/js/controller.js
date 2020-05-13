@@ -28,8 +28,8 @@ var BROWSEANNOTATED = "browse-annotated";
 var SEARCHCONTENT = "SearchContent"
 
 //var searchWriteMode = false;
-var showLeftNodes = true;
-var showRightNodes = true;
+var showLeftNodes = false;
+var showRightNodes = false;
 
 
 /////////////////////
@@ -66,6 +66,9 @@ $(document).ready(function(){
     $("#delete").click(onDelete);
     $("#stepBackward").click(onStepBack);
     $("#changeOrder").click(onChangeOrder);
+                  
+    $("#nodes1").click(onClickLeft);
+    $("#nodes2").click(onClickRight);
                   
     // Drag'n'drop handlers
     $("#lang1List")
@@ -129,6 +132,9 @@ function showNodes(nodesList, isShown, nodeData){
         element.append(lang1Container)
          */
     });
+    }
+    else{
+        d3.select(nodesList).selectAll("li").remove();
     }
 }
 
@@ -1304,4 +1310,42 @@ function onChangeOrder(){
 }
 
                                                                         
+function onClickLeft(){
+    var leftNodes = null;
+    if (!modelReverseLang){
+        leftNodes = modelNodesLang1;
+    }
+    else{
+        leftNodes = modelNodesLang2;
+    }
+                                                                        
+    if(showLeftNodes){
+        showLeftNodes = false;
+    }
+    else{
+        showLeftNodes = true;
+    }
+                                                                        
+    showNodes("#nodes1List", showLeftNodes, leftNodes);
+    renderLinks();
+}
 
+function onClickRight(){
+    var rightNodes = null;
+    if (!modelReverseLang){
+        rightNodes = modelNodesLang2;
+    }
+    else{
+        rightNodes = modelNodesLang1;
+    }
+                                                                        
+    if(showRightNodes){
+        showRightNodes = false;
+    }
+    else{
+        showRightNodes = true;
+    }
+
+    showNodes("#nodes2List", showRightNodes, rightNodes);
+    renderLinks();
+}

@@ -865,7 +865,7 @@ function renderNodeRightLinks() {
                 //alert(lang2Element.context.__data__.term);
                 drawLinks(lang2Element, node2Element, 1,
                           opacityScale, strokeWidthScale, links,
-                          { lang2: d.nr, node2: e.nr }, "Theme #" + d.nr + "\n"
+                          { lang2: e.nr, node2: d.nr }, "Theme #" + d.nr + "\n"
                           + "Text #" + e.nr, "node2-to-lang2", svgId);
                 });
     
@@ -1218,8 +1218,9 @@ function highlightLang2Element(termElement, direct, indirect) {
     let term = d3.select(termElement.get(0)).datum();
 	
     highlightLang2Links(term.nr);
+    highlightNode2Links(term.nr);
 
-    secondaryHighlightLang(indirect, term.nr, "#lang1List",  "#lang2List", "#nodes1List");
+    secondaryHighlightLang1(indirect, term.nr, "#lang1List",  "#lang2List", "#nodes1List");
     secondaryHighlightNode(indirect, term.nr, "#nodes2List");
 }
 
@@ -1233,8 +1234,9 @@ function highlightLang1Element(termElement, direct, indirect) {
     let term = d3.select(termElement.get(0)).datum();
 	
     highlightLang1Links(term.nr);
+    highlightNode1Links(term.nr);
     
-    secondaryHighlightLang(indirect, term.nr, "#lang2List", "#lang1List", "#nodes2List");
+    secondaryHighlightLang2(indirect, term.nr, "#lang2List", "#lang1List", "#nodes2List");
     secondaryHighlightNode(indirect, term.nr, "#nodes1List");   	
 }
 
@@ -1245,7 +1247,6 @@ function highlightNode1Element(termElement, direct, indirect){
 
     // Get the datum
     let datum = d3.select(termElement.get(0)).datum();
-    highlightNode1Links(datum.nr)
     
     for (let j = 0; j < datum.alignments.length; j++){
 	let nr = datum.alignments[j];
@@ -1266,7 +1267,6 @@ function highlightNode2Element(termElement, direct, indirect){
 
     // Get the datum
     let datum = d3.select(termElement.get(0)).datum();
-    highlightNode2Links(datum.nr)
 
     for (let j = 0; j < datum.alignments.length; j++){
 	let nr = datum.alignments[j];
@@ -1281,14 +1281,31 @@ function highlightNode2Element(termElement, direct, indirect){
 }
 
 
-function secondaryHighlightLang(highlightClass, nr, listName, otherListName, secondaryNodesList){
+function secondaryHighlightLang1(highlightClass, nr, listName, otherListName, secondaryNodesList){
         d3.select(listName).selectAll("li")
     .filter(function(d, i){
             return d.alignments.indexOf(nr) != -1;
             })
     .classed(highlightClass, true)
     .each(function(d, i){
-          secondaryHighlightNode(highlightClass, d.nr, secondaryNodesList)})
+        secondaryHighlightNode(highlightClass, d.nr, secondaryNodesList);
+	highlightNode1Links(d.nr);
+    })
+    .each(function(d, i){
+	thirdlyHighlight(otherListName, d.nr, highlightClass);
+    })
+}
+
+function secondaryHighlightLang2(highlightClass, nr, listName, otherListName, secondaryNodesList){
+        d3.select(listName).selectAll("li")
+    .filter(function(d, i){
+            return d.alignments.indexOf(nr) != -1;
+            })
+    .classed(highlightClass, true)
+    .each(function(d, i){
+        secondaryHighlightNode(highlightClass, d.nr, secondaryNodesList);
+	highlightNode2Links(d.nr);
+    })
     .each(function(d, i){
 	thirdlyHighlight(otherListName, d.nr, highlightClass);
     })
@@ -1334,19 +1351,19 @@ function highlightLang1Links(term1Nr){
     .each(renderLangToLangLinkHighlight);
 }
 
-function highlightNode1Links(nodeNr){
+function highlightNode1Links(termNr){
     d3.selectAll(".node1-to-lang1")
 	.filter(function(f, i){
-            return nodeNr == f.node1;
+            return termNr == f.lang1;
         })
 	.classed("link-highlight", true)
 	.each(renderNodeLeftLinksHighlight);
 }
 
-function highlightNode2Links(nodeNr){
+function highlightNode2Links(termNr){
     d3.selectAll(".node2-to-lang2")
 	.filter(function(f, i){
-            return nodeNr == f.lang2;
+            return termNr == f.lang2;
         })	    
 	.classed("link-highlight", true)
 	.each(renderNodeRightLinksHighlight);

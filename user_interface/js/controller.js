@@ -1281,7 +1281,7 @@ function secondaryHighlightLang1(highlightClass, nr, listName, otherListName, se
     .classed(highlightClass, true)
     .each(function(d, i){
         secondaryHighlightNode(highlightClass, d.nr, secondaryNodesList);
-	//highlightNode1Links(d.nr);
+	highlightNode1Links(d.nr);
     })
     .each(function(d, i){
 	thirdlyHighlightLang1(otherListName, d.nr, highlightClass);
@@ -1296,7 +1296,7 @@ function secondaryHighlightLang2(highlightClass, nr, listName, otherListName, se
     .classed(highlightClass, true)
     .each(function(d, i){
         secondaryHighlightNode(highlightClass, d.nr, secondaryNodesList);
-	//highlightNode2Links(d.nr);
+	highlightNode2Links(d.nr);
     })
     .each(function(d, i){
 	thirdlyHighlightLang2(otherListName, d.nr, highlightClass);

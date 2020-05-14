@@ -86,13 +86,13 @@ $(document).ready(function(){
         .on("dragstart", ".term-element", onNodeElementDragStart)
         .on("dragend", ".term-element", onNodeElementDragEnd);
 
-    /*
+    
     $("#nodes2List")
-        .on("dragenter", ".term-element", onNodeElementDragEnterOver)
-        .on("dragover", ".term-element", onNodeElementDragEnterOver)
-        .on("dragleave", ".term-element", onNodeElementDragLeave)
+        .on("dragenter", ".term-element", onLangElementDragEnterOver)
+        .on("dragover", ".term-element", onLangElementDragEnterOver)
+        .on("dragleave", ".term-element", onLangElementDragLeave)
         .on("drop", ".term-element", onNodeElementDrop);
-    */
+    
     
 	// Highlight handlers
     $("#lang1List")
@@ -1137,6 +1137,39 @@ function onLangElementDrop(event){
     disableAfterStartingAnnotate();
 }
 
+function onNodeElementDrop(event){
+    if (modelCurrentDragLang1Nr == null && modelCurrentDragNode1Alignments == null){
+	return;
+    }
+    let toAdd = null;
+	
+    if(modelCurrentDragNode1Alignments){
+	toAdd = modelCurrentDragNode1Alignments;
+    }
+    else{
+	toAdd = [modelCurrentDragLang1Nr];
+    }
+    
+    event.preventDefault();
+    let originalEvent = event.originalEvent;
+    originalEvent.stopPropagation();
+    let termElement = $(event.currentTarget);
+    let lang2Alignments  = d3.select(termElement["context"]).datum().alignments;
+
+    for (let i = 0; i < toAdd.length; i++) {
+	for (let j = 0; j < lang2Alignments.length; j++){
+	    modelAddLangLangLink(toAdd[i], lang2Alignments[j]);
+	}
+    }
+       
+    let lang2Element = $(event.currentTarget);
+    lang2Element.removeClass("drop-feedback");
+
+    modelCurrentDragLang1Nr = null;
+    modelCurrentDragNode1Alignments = null;
+    
+    disableAfterStartingAnnotate();
+}
 
 // Removes a text from a theme
 function onAlignRemove(){

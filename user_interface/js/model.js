@@ -23,8 +23,8 @@ var modelPreviousDataPointNumber = -1;
 var modelUndoClicked = false;
 var modelReverseLang = false;
 
-var modelNodesLang1 = [];
-var modelNodesLang2 = [];
+var modelNodesLang1 = null;
+var modelNodesLang2 = null;
 
 
 /////////
@@ -86,8 +86,7 @@ function resetModelData(){
     modelLang1Name = null;
     modelLang2Name = null;
 
-   modelNodesLang1 = null;
-   modelNodesLang2 = null;
+
     
     resetSortingChoiceData();
     resetActionChoiceData();
@@ -99,6 +98,9 @@ function modelResetPointData(){
     modelCurrentDataPointNumber = -1;
     modelPreviousDataPointNumber = -1;
     modelCurrentDragLang1Nr = null;
+
+    modelNodesLang1 = null;
+    modelNodesLang2 = null;
 }
 
 
@@ -209,7 +211,7 @@ function getNodesForLang(otherLangData){
               let newNode = null;
               for(let i = 0; i < otherLangData[j].alignments.length; i++){
                   if(alreadyConnectedInNode.indexOf(otherLangData[j].alignments[i]) == -1){
-                      newNode = "True";
+                      newNode = true;
                   }
               }
     
@@ -244,6 +246,9 @@ function modelremoveLangLangLink(lang1Nr, lang2Nr){
     
     leftAnnotations[lang1Nr].alignments.splice(indexInLang1Array, 1);
     rightAnnotations[lang2Nr].alignments.splice(indexInLang2Array, 1);
+
+    modelNodesLang1 = getNodesForLang(modelCurrentPreannotationLang2);
+    modelNodesLang2 = getNodesForLang(modelCurrentPreannotationLang1);
     
     prepareToShowPreAnnotation();
 }
@@ -274,7 +279,10 @@ function modelAddLangLangLink(lang1Nr, lang2Nr){
     
     leftAnnotations[lang1Nr].alignments.push(parseInt(lang2Nr));
     rightAnnotations[lang2Nr].alignments.push(parseInt(lang1Nr));
-        
+
+    modelNodesLang1 = getNodesForLang(modelCurrentPreannotationLang2);
+    modelNodesLang2 = getNodesForLang(modelCurrentPreannotationLang1);
+    
     prepareToShowPreAnnotation();
 
 }

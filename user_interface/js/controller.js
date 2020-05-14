@@ -80,7 +80,8 @@ $(document).ready(function(){
         .on("dragover", ".term-element", onLangElementDragEnterOver)
         .on("dragleave", ".term-element", onLangElementDragLeave)
         .on("drop", ".term-element", onLangElementDrop);
-                  
+
+    
 	// Highlight handlers
     $("#lang1List")
 		.on("mouseenter", ".term-element", onLang1ElementMouseEnter)
@@ -1012,7 +1013,8 @@ function onLangElementDragStart(event) {
 
     // Mark the element as the source of dragged data
     // (used for filtering in dragover handlers, since there is no way to access the data)
-    
+
+    /*
     termElement.addClass("dragged");
     let transferData = {
         //textId: d3.select(event.target).datum().id
@@ -1020,6 +1022,7 @@ function onLangElementDragStart(event) {
     };
     
     originalEvent.dataTransfer.setData("term-element", JSON.stringify(transferData));
+*/
     originalEvent.dataTransfer.effectAllowed = "copy";
     originalEvent.dataTransfer.dropEffect = "copy";
      

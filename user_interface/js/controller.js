@@ -81,6 +81,18 @@ $(document).ready(function(){
         .on("dragleave", ".term-element", onLangElementDragLeave)
         .on("drop", ".term-element", onLangElementDrop);
 
+    // Drag'n'drop handlers
+    $("#nodes1List")
+        .on("dragstart", ".term-element", onNodeElementDragStart)
+        .on("dragend", ".term-element", onNodeElementDragEnd);
+
+    /*
+    $("#nodes2List")
+        .on("dragenter", ".term-element", onNodeElementDragEnterOver)
+        .on("dragover", ".term-element", onNodeElementDragEnterOver)
+        .on("dragleave", ".term-element", onNodeElementDragLeave)
+        .on("drop", ".term-element", onNodeElementDrop);
+    */
     
 	// Highlight handlers
     $("#lang1List")
@@ -114,13 +126,14 @@ function prepareToShowPreAnnotation(){
      }
 }
 
-function showNodes(nodesList, isShown, nodeData){
+function showNodes(nodesList, isShown, nodeData, draggable){
     d3.select(nodesList).selectAll("li").remove();
     if(isShown){
         d3.select(nodesList).selectAll("li")
         .data(nodeData)
         .enter()
         .append("li")
+	.attr("draggable", draggable)
         .classed("list-group-item", true)
     
         .each(function(d, i){
@@ -138,6 +151,9 @@ function showNodes(nodesList, isShown, nodeData){
 function showPreannotation(){
     $("#lang1List").empty();
     $("#lang2List").empty();
+    $("#nodes1List").empty();
+    $("#nodes2List").empty();
+    
     resetLinks();
 
     var leftData = null;
@@ -207,8 +223,8 @@ function showPreannotation(){
 	});
     
 
-    showNodes("#nodes1List", showLeftNodes, leftNodes);
-    showNodes("#nodes2List", showRightNodes, rightNodes);
+    showNodes("#nodes1List", showLeftNodes, leftNodes, true);
+    showNodes("#nodes2List", showRightNodes, rightNodes, false);
 
     renderLinks();
     
@@ -1025,7 +1041,25 @@ function onLangElementDragStart(event) {
 */
     originalEvent.dataTransfer.effectAllowed = "copy";
     originalEvent.dataTransfer.dropEffect = "copy";
-     
+}
+
+function onNodeElementDragStart(event) {
+
+    if (modelCurrentAction != ANNOTATE){
+	alert("You can't do annotations in browse mode");
+	return;
+    }
+
+    let originalEvent = event.originalEvent;
+    let termElement = $(event.target).parentsUntil("#nodes1List", ".term-element");
+
+     modelCurrentDragNode1Alignments = d3.select(termElement["context"]).datum().alignments;
+    
+    // Mark the element as the source of dragged data
+    // (used for filtering in dragover handlers, since there is no way to access the data)
+
+    originalEvent.dataTransfer.effectAllowed = "copy";
+    originalEvent.dataTransfer.dropEffect = "copy";
 }
 
 
@@ -1034,13 +1068,22 @@ function onLangElementDragEnd(event) {
     let originalEvent = event.originalEvent;
     let termElement = $(event.target);
     
-    originalEvent.dataTransfer.clearData();
+    //originalEvent.dataTransfer.clearData();
+    modelCurrentDragLang1Nr = null;
     
     // Unmark the element as the source of dragged data
     termElement.removeClass("dragged");
 }
 
-
+function onNodeElementDragEnd(event) {
+    let originalEvent = event.originalEvent;
+    let termElement = $(event.target);
+    
+    modelCurrentDragNode1Alignments = null;
+   
+    // Unmark the element as the source of dragged data
+    termElement.removeClass("dragged");
+}
 
 function onLangElementDragEnterOver(event) {
   
@@ -1061,16 +1104,36 @@ function onLangElementDragLeave(event){
 }
 
 function onLangElementDrop(event){
+    if (modelCurrentDragLang1Nr == null && modelCurrentDragNode1Alignments == null){
+	return;
+    }
+    let toAdd = null;
+	
+    if(modelCurrentDragNode1Alignments){
+	toAdd = modelCurrentDragNode1Alignments;
+    }
+    else{
+	toAdd = [modelCurrentDragLang1Nr];
+    }
+    
     event.preventDefault();
     let originalEvent = event.originalEvent;
     originalEvent.stopPropagation();
     let termElement = $(event.currentTarget);
     let lang2Nr  = d3.select(termElement["context"]).datum().nr;
-    modelAddLangLangLink(modelCurrentDragLang1Nr, lang2Nr);
+
+    for (let i = 0; i < toAdd.length; i++) {
+	modelAddLangLangLink(toAdd[i], lang2Nr);
+    }
+    
+    //modelAddLangLangLink(modelCurrentDragLang1Nr, lang2Nr);
     
     let lang2Element = $(event.currentTarget);
     lang2Element.removeClass("drop-feedback");
-                                                                        
+
+    modelCurrentDragLang1Nr = null;
+    modelCurrentDragNode1Alignments = null;
+    
     disableAfterStartingAnnotate();
 }
 
@@ -1460,7 +1523,7 @@ function onClickLeft(){
     }
                                                                         
     
-    showNodes("#nodes1List", showLeftNodes, leftNodes);
+    showNodes("#nodes1List", showLeftNodes, leftNodes, true);
     renderLinks();
                                                                         
 }
@@ -1483,6 +1546,6 @@ function onClickRight(){
         $("#nodes2").addClass("show-nodes-button-selected");
     }
 
-    showNodes("#nodes2List", showRightNodes, rightNodes);
+    showNodes("#nodes2List", showRightNodes, rightNodes, false);
     renderLinks();
 }

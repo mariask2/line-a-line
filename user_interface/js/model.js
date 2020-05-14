@@ -14,7 +14,10 @@ var modelCurrentFilterStr = "";
 var modelCurrentDataPointNumber = -1;
 var modelCurrentPreannotationLang1 = null;
 var modelCurrentPreannotationLang2 = null;
+
 var modelCurrentDragLang1Nr = null;
+var modelCurrentDragNode1Alignments = null;
+
 var modelCorpusname = null;
 var modelCurrentPrealignmentMethod = null;
 var modelLang1Name = null;

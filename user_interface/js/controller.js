@@ -125,19 +125,11 @@ function showNodes(nodesList, isShown, nodeData){
         .each(function(d, i){
               let element = $(this);
               element.addClass("term-element");
-              //element.attr("title", "Term: " + d.term);
               let titleLabel = $("<span></span>");
               titleLabel.addClass("title-label");
               titleLabel.append(d.nr);
               element.append(titleLabel);
-        
-        /*
-        let lang1Container = $("<span></span>");
-        lang1Container.addClass("lang-link-container");
-        lang1Container.addClass("pull-right")
-        populateLang1Container(d, lang1Container);
-        element.append(lang1Container)
-         */
+   
     });
     }
 }
@@ -1289,10 +1281,10 @@ function secondaryHighlightLang1(highlightClass, nr, listName, otherListName, se
     .classed(highlightClass, true)
     .each(function(d, i){
         secondaryHighlightNode(highlightClass, d.nr, secondaryNodesList);
-	highlightNode1Links(d.nr);
+	//highlightNode1Links(d.nr);
     })
     .each(function(d, i){
-	thirdlyHighlight(otherListName, d.nr, highlightClass);
+	thirdlyHighlightLang1(otherListName, d.nr, highlightClass);
     })
 }
 
@@ -1304,19 +1296,33 @@ function secondaryHighlightLang2(highlightClass, nr, listName, otherListName, se
     .classed(highlightClass, true)
     .each(function(d, i){
         secondaryHighlightNode(highlightClass, d.nr, secondaryNodesList);
-	highlightNode2Links(d.nr);
+	//highlightNode2Links(d.nr);
     })
     .each(function(d, i){
-	thirdlyHighlight(otherListName, d.nr, highlightClass);
+	thirdlyHighlightLang2(otherListName, d.nr, highlightClass);
     })
 	 }
 
-function thirdlyHighlight(otherListName, nr, highlightClass){
+function thirdlyHighlightLang1(otherListName, nr, highlightClass){
+    d3.select(otherListName).selectAll("li")
+	.filter(function(d, i){
+            return d.alignments.indexOf(nr) != -1;
+	})
+	.classed(highlightClass, true)
+	.each(function(d, i){
+	highlightNode2Links(d.nr);
+    })
+}
+
+function thirdlyHighlightLang2(otherListName, nr, highlightClass){
      d3.select(otherListName).selectAll("li")
     .filter(function(d, i){
             return d.alignments.indexOf(nr) != -1;
             })
-    .classed(highlightClass, true)
+	.classed(highlightClass, true)
+    	.each(function(d, i){
+	highlightNode1Links(d.nr);
+    })
 	  }
 
 function secondaryHighlightNode(highlightClass, nr, listName){

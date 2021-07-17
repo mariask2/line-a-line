@@ -51,9 +51,9 @@ def do_align(inputs, seed):
 if __name__ == '__main__':
     inputs = ["efmaral/3rdparty/data/test.eng",  "efmaral/3rdparty/data/test.hin"]
     res = do_align(inputs, seed=None)
-    print(res)
+    print("result ", res)
 
-    inputs_2 = ["fast_align_format_test.txt"]
-    res_2 = do_align(inputs_2, seed=None)
-    print(res_2)
+    #inputs_2 = ["fast_align_format_test.txt"]
+    #res_2 = do_align(inputs_2, seed=None)
+    #print("result ", res_2)
 

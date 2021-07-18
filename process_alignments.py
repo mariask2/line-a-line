@@ -4,11 +4,11 @@ import os
 import nltk.translate.gdfa as gdfa
 
 
-def run_aligner_on_fastalign(fastalign_format, rev_fastalign_format):
+def run_aligner_on_fastalign(fastalign_format, vocabulary, rev_fastalign_format, rev_vocabulary):
     res, rev_res = (None, None)
     
-    fastalign_format_str = "\n".join(fastalign_format) + "\n"
-    rev_fastalign_format_str = "\n".join(rev_fastalign_format) + "\n"
+    fastalign_format_str = "\n".join(fastalign_format + vocabulary) + "\n"
+    rev_fastalign_format_str = "\n".join(rev_fastalign_format + rev_vocabulary) + "\n"
     with tempfile.TemporaryDirectory() as td:
         f_name = os.path.join(td, 'temp')
         with tempfile.TemporaryDirectory() as rev_td:
@@ -40,7 +40,7 @@ def do_process_alignments(corpus_lang_name, mongo_connector):
     vocabulary_reverse = mongo_connector.get_extracted_vocabulary_in_fastalign_format(corpus_lang_name, reverse=True)
     
     # Run aligner
-    res, res_reversed = run_aligner_on_fastalign(fastalign_format + vocabulary, fastalign_format_reversed + vocabulary_reverse)
+    res, res_reversed = run_aligner_on_fastalign(fastalign_format, vocabulary, fastalign_format_reversed, vocabulary_reverse)
     #res_reversed = run_aligner_on_fastalign(fastalign_format_reversed + vocabulary_reverse, fastalign_format_reversed + vocabulary_reverse)
         
     result_list = []

@@ -45,7 +45,7 @@ def do_align(f_name, rev_f_name, seed):
     for line in output:
         result.append(line.decode('ascii').strip())
         
-    # The outher direction
+    # The other direction
     
     rev_inputs = [rev_f_name]
     reversed = align(rev_inputs, n_samplers, len(inputs),
@@ -60,7 +60,7 @@ def do_align(f_name, rev_f_name, seed):
     rev_result = []
     for line in rev_output:
         rev_result.append(line.decode('ascii').strip())
-    
+
     return result, rev_result
 
 

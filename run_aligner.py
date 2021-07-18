@@ -48,7 +48,7 @@ def do_align(f_name, rev_f_name, seed):
     # The other direction
     
     rev_inputs = [rev_f_name]
-    reversed = align(rev_inputs, n_samplers, len(inputs),
+    reversed = align(rev_inputs, n_samplers, len(rev_inputs),
         null_prior, lex_alpha, null_alpha,
         reverse, model, prefix_len, suffix_len,
         seed, discretize, True, lower=not no_lower_case)

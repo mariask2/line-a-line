@@ -76,8 +76,13 @@ Cut and paste 'http://127.0.0.1:5000/line-a-line/' into the web browser
 
 
 *****
+Using eflomal:
 1) git clone https://github.com/robertostling/eflomal.git
 2) in the eflomal folder, there is a make file, replace it with this one: Makefile_eflomal_mac
 3) run the instructions given for eflomal
 4) rename the eflomar folder to something else
 5) DYLD_FALLBACK_LIBRARY_PATH=/opt/miniconda3/envs/aligner/lib python3 run_eflomal_aligner.py
+
+
+When adding the pre-annotations, consequently:
+DYLD_FALLBACK_LIBRARY_PATH=/opt/miniconda3/envs/aligner/lib python run_extract_data_labour_market_social_security_de_sv_fastalign_format_ny_dator.py

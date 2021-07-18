@@ -4,15 +4,21 @@ import os
 import nltk.translate.gdfa as gdfa
 
 
-def run_aligner_on_fastalign(fastalign_format):
-    res = None
+def run_aligner_on_fastalign(fastalign_format, rev_fastalign_format):
+    res, rev_res = (None, None)
+    
     fastalign_format_str = "\n".join(fastalign_format) + "\n"
+    rev_fastalign_format_str = "\n".join(rev_fastalign_format) + "\n"
     with tempfile.TemporaryDirectory() as td:
         f_name = os.path.join(td, 'temp')
-        with open(f_name, 'w') as fh:
-            fh.write(fastalign_format_str)
-            res = run_aligner.do_align(inputs = [f_name], seed = None)
-    return res
+        with tempfile.TemporaryDirectory() as rev_td:
+            rev_f_name = os.path.join(rev_td, 'rev_temp')
+            with open(f_name, 'w') as fh:
+                with open(rev_f_name, 'w') as rev_fh:
+                    fh.write(fastalign_format_str)
+                    rev_fh.write(rev_fastalign_format_str)
+                    res, rev_res = run_aligner.do_align(f_name, rev_f_name, seed = None)
+    return res, rev_res
 
 def get_intersection(res_el_filtered, res_reversed_el_filtered):
     # Converts pharaoh text format into list of tuples.
@@ -28,21 +34,15 @@ def do_process_alignments(corpus_lang_name, mongo_connector):
     # One direction
     fastalign_format = mongo_connector.get_all_sentence_pairs_in_corpus_fastalign_format(corpus_lang_name)
     vocabulary = mongo_connector.get_extracted_vocabulary_in_fastalign_format(corpus_lang_name)
-    res = run_aligner_on_fastalign(fastalign_format + vocabulary)
-    
-    #print(fastalign_format[:10])
-    print(vocabulary[:10])
     
     # The other direction
     fastalign_format_reversed = mongo_connector.get_all_sentence_pairs_in_corpus_fastalign_format(corpus_lang_name, reverse=True)
     vocabulary_reverse = mongo_connector.get_extracted_vocabulary_in_fastalign_format(corpus_lang_name, reverse=True)
-    res_reversed = run_aligner_on_fastalign(fastalign_format_reversed + vocabulary_reverse)
     
-
-    
-    #print(fastalign_format_reversed[:10])
-    #print(vocabulary_reverse[:10])
-    
+    # Run aligner
+    res, res_reversed = run_aligner_on_fastalign(fastalign_format + vocabulary, fastalign_format_reversed + vocabulary_reverse)
+    #res_reversed = run_aligner_on_fastalign(fastalign_format_reversed + vocabulary_reverse, fastalign_format_reversed + vocabulary_reverse)
+        
     result_list = []
     for nr, (res_el, res_reversed_el, text) in enumerate(zip(res[:len(fastalign_format)], res_reversed[:len(fastalign_format)], fastalign_format)):
         [lang_1, lang_2] = text.split("|||")

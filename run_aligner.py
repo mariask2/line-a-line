@@ -6,7 +6,7 @@ from cefmaral import ibm_print
 import sys, argparse, random, pickle, tempfile
 
 # Adapted from efmaral's align.py
-def do_align(inputs, seed):
+def do_align(f_name, rev_f_name, seed):
     verbose = True
     no_lower_case = False
     reverse = False
@@ -22,9 +22,8 @@ def do_align(inputs, seed):
     
     seed = random.randint(0, 0x7ffffff) if seed is None else seed
 
-    if len(inputs) not in (1, 2):
-        raise ValueError('Only one or two input files allowed!')
-
+    # One direction
+    inputs = [f_name]
     discretize = output_prob is None
 
     aaa = align(inputs, n_samplers, len(inputs),
@@ -45,7 +44,24 @@ def do_align(inputs, seed):
     result = []
     for line in output:
         result.append(line.decode('ascii').strip())
-    return result
+        
+    # The outher direction
+    
+    rev_inputs = [rev_f_name]
+    reversed = align(rev_inputs, n_samplers, len(inputs),
+        null_prior, lex_alpha, null_alpha,
+        reverse, model, prefix_len, suffix_len,
+        seed, discretize, True, lower=not no_lower_case)
+    
+    rev_output = tempfile.TemporaryFile()
+    ibm_print(reversed, reverse, rev_output.fileno())
+    
+    rev_output.seek(0)
+    rev_result = []
+    for line in rev_output:
+        rev_result.append(line.decode('ascii').strip())
+    
+    return result, rev_result
 
 
 if __name__ == '__main__':
